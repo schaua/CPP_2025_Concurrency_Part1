@@ -1,0 +1,14 @@
+[
+{
+  "directory": "C:/projects/CPP_2025_Concurrency_Part1/src/module00/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -std=gnu++23 -o CMakeFiles\\DemoProject.dir\\CMakeFiles\\3.28.3\\CompilerIdCXX\\CMakeCXXCompilerId.cpp.obj -c C:\\projects\\CPP_2025_Concurrency_Part1\\src\\module00\\build\\CMakeFiles\\3.28.3\\CompilerIdCXX\\CMakeCXXCompilerId.cpp",
+  "file": "C:/projects/CPP_2025_Concurrency_Part1/src/module00/build/CMakeFiles/3.28.3/CompilerIdCXX/CMakeCXXCompilerId.cpp",
+  "output": "CMakeFiles/DemoProject.dir/CMakeFiles/3.28.3/CompilerIdCXX/CMakeCXXCompilerId.cpp.obj"
+},
+{
+  "directory": "C:/projects/CPP_2025_Concurrency_Part1/src/module00/build",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe   -g -std=gnu++23 -o CMakeFiles\\DemoProject.dir\\main.cpp.obj -c C:\\projects\\CPP_2025_Concurrency_Part1\\src\\module00\\main.cpp",
+  "file": "C:/projects/CPP_2025_Concurrency_Part1/src/module00/main.cpp",
+  "output": "CMakeFiles/DemoProject.dir/main.cpp.obj"
+}
+]

@@ -1,0 +1,3 @@
+C:/projects/CPP_2025_Concurrency_Part1/src/module00/build/CMakeFiles/module00.dir
+C:/projects/CPP_2025_Concurrency_Part1/src/module00/build/CMakeFiles/ALL_BUILD.dir
+C:/projects/CPP_2025_Concurrency_Part1/src/module00/build/CMakeFiles/ZERO_CHECK.dir
