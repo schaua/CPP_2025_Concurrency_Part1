@@ -2,9 +2,15 @@
 #include <mutex>
 #include <thread>
 #include <chrono>
+#include <vector>
+#include <shared_mutex>
+
 
 using namespace std::chrono_literals;
 
+
+std::vector<std::string> transactions;
+std::shared_mutex transaction_mut;
 
 double current_balance{1000};
 std::string message;
@@ -15,6 +21,9 @@ void deposit(double amount){
     {    
         std::unique_lock<std::mutex> lg{bal_mut};
         current_balance += amount;
+        transaction_mut.lock();
+        transactions.push_back("Added money to the account: ");
+        transaction_mut.unlock();
     }
     std::this_thread::sleep_for(100ms);
 }
@@ -24,8 +33,20 @@ void withdraw(double amount){
     {    
         std::unique_lock<std::mutex> lg{bal_mut};
         current_balance -= amount;
+        transaction_mut.lock();
+        transactions.push_back("Removed money from the account: ");
+        transaction_mut.unlock();
         std::this_thread::sleep_for(1000ms);
     }
+}
+
+void statement() {
+    transaction_mut.lock_shared();
+    for (auto& tr : transactions)
+    {
+        std::cout << tr << std::endl;
+    }
+    transaction_mut.unlock_shared();
 }
 
 int main(int argc, char const *argv[])
@@ -58,8 +79,14 @@ int main(int argc, char const *argv[])
 
         }
 
+        std::thread s1{statement};
+        std::thread s2{statement};
         deposit_thread.join();
         withdraw_thread.join();
+        s1.join();
+        s2.join();
+
+
     }
     {
         std::unique_lock<std::mutex> lg{bal_mut};
