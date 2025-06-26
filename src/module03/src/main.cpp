@@ -19,9 +19,8 @@ std::mutex bal_mut{};
 void deposit(double amount){
     std::this_thread::sleep_for(100ms);
     {    
-        std::unique_lock<std::mutex> lg{bal_mut};
+        std::scoped_lock<std::shared_mutex, std::mutex> lg{ transaction_mut, bal_mut};
         current_balance += amount;
-        std::unique_lock<std::shared_mutex> sl{transaction_mut};
         transactions.push_back("Added money to the account: ");
     }
     std::this_thread::sleep_for(100ms);
@@ -30,9 +29,8 @@ void deposit(double amount){
 void withdraw(double amount){
     std::this_thread::sleep_for(100ms);
     {    
-        std::unique_lock<std::mutex> lg{bal_mut};
+        std::scoped_lock lg{bal_mut, transaction_mut};
         current_balance -= amount;
-        std::unique_lock<std::shared_mutex> sl{transaction_mut};
         transactions.push_back("Removed money from the account: ");
         std::this_thread::sleep_for(1000ms);
     }
