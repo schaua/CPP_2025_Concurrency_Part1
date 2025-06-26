@@ -24,8 +24,8 @@ void withdraw(double amount){
     {    
         std::unique_lock<std::mutex> lg{bal_mut};
         current_balance -= amount;
+        std::this_thread::sleep_for(1000ms);
     }
-    std::this_thread::sleep_for(100ms);
 }
 
 int main(int argc, char const *argv[])
@@ -39,6 +39,8 @@ int main(int argc, char const *argv[])
         // std::thread withdraw_thread = std::thread{withdraw, 200};
         std::thread deposit_thread{[&](double amount){deposit(amount); message="Hello";},100};
         std::thread withdraw_thread{[&](double amount){withdraw(amount);},200};
+
+        // scope block
         {
             std::unique_lock<std::mutex> lg{bal_mut, std::defer_lock};
             if (lg.try_lock())
@@ -51,6 +53,9 @@ int main(int argc, char const *argv[])
                 std::cout << "Current balance: after " << current_balance << std::endl;
 
             }
+            else
+                std::cout << "Unable to obtain current_balance lock" << std::endl;
+
         }
 
         deposit_thread.join();
