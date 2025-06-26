@@ -4,10 +4,12 @@
 #include <chrono>
 #include <vector>
 #include <shared_mutex>
+#include <condition_variable>
 
 
 using namespace std::chrono_literals;
 
+std::condition_variable cv;
 
 std::vector<std::string> transactions;
 std::shared_mutex transaction_mut;
@@ -22,6 +24,7 @@ void deposit(double amount){
         std::scoped_lock<std::shared_mutex, std::mutex> lg{ transaction_mut, bal_mut};
         current_balance += amount;
         transactions.push_back("Added money to the account: ");
+        cv.notify_all();
     }
     std::this_thread::sleep_for(100ms);
 }
@@ -32,11 +35,15 @@ void withdraw(double amount){
         std::scoped_lock lg{bal_mut, transaction_mut};
         current_balance -= amount;
         transactions.push_back("Removed money from the account: ");
+        cv.notify_all();
         std::this_thread::sleep_for(1000ms);
     }
 }
 
 void statement() {
+    std::unique_lock<std::mutex> ul{bal_mut};
+    std::cout << "About to wait" << std::endl;
+    cv.wait(ul, [] { return !transactions.empty();});    
     std::shared_lock<std::shared_mutex> sl{transaction_mut};
     for (auto& tr : transactions)
     {
@@ -73,7 +80,7 @@ int main(int argc, char const *argv[])
                 std::cout << "Unable to obtain current_balance lock" << std::endl;
 
         }
-
+        cv.notify_all();
         std::thread s1{statement};
         std::thread s2{statement};
         deposit_thread.join();
