@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.10...3.28)
+
+get_filename_component(PROJNAME "${CMAKE_CURRENT_SOURCE_DIR}" NAME)
+
+project(${PROJNAME} VERSION 1.0 LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
+file(GLOB_RECURSE SOURCES src/*.cpp)
+
+add_executable(${PROJNAME} ${SOURCES})
