@@ -3,12 +3,15 @@
 #include <semaphore>
 #include <chrono>
 #include <latch>
+#include <barrier>
 
 std::counting_semaphore<3> semaphore{3};
 std::latch latch{7};
+std::barrier barrier{7};
 
 void accessResource(int id){
     latch.arrive_and_wait();
+    barrier.arrive_and_wait();
     semaphore.acquire();
     std::cout << "Thread " << id << " is accessing the resource." << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -23,6 +26,7 @@ int main(int argc, char const *argv[])
         threads.push_back(std::thread(accessResource, i));
         
     latch.arrive_and_wait();
+    barrier.arrive_and_wait();
     for (auto& thread : threads)
         thread.join();
     return 0;
